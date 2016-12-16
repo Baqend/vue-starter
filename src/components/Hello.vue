@@ -4,6 +4,8 @@
     <h2>Navigation</h2>
     <ul>
       <li><router-link :to="{ name: 'chats' }" >Chats</router-link></li>
+      <li v-cloak v-if="isLoggedIn"><router-link :to="{ name: 'me' }">Account</router-link></li>
+      <li v-cloak v-else><router-link :to="{ name: 'signup' }">Signup</router-link></li>
     </ul>
     <h4>Essential Links</h4>
     <ul>
@@ -24,13 +26,21 @@
   </div>
 </template>
 
-<script>
+<script type="text/babel">
+import db from 'baqend'
+
 export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js and Baqend App'
+      msg: 'Welcome to Your Vue.js and Baqend App',
+      isLoggedIn: null
     }
+  },
+  created () {
+    db.ready(() => {
+      this.isLoggedIn = !!db.User.me
+    })
   }
 }
 </script>
